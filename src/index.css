@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-theme-primary: var(--theme-primary);
+  --color-theme-background: var(--theme-background);
+  --color-theme-surface: var(--theme-surface);
+  --color-theme-border: var(--theme-border);
+  --color-theme-text: var(--theme-text);
+  --color-theme-text-muted: var(--theme-text-muted);
+  --color-theme-sidebar: var(--theme-sidebar);
+  --color-theme-sidebar-text: var(--theme-sidebar-text);
+  --color-theme-sidebar-text-muted: var(--theme-sidebar-text-muted);
+  --color-theme-accent: var(--theme-accent);
+}
+
+@layer utilities {
+  .theme-tooltip {
+    @apply relative cursor-help;
+  }
+
+  .theme-tooltip:hover::after {
+    @apply absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-slate-900 text-white text-[9px] font-black uppercase tracking-widest rounded shadow-xl whitespace-nowrap z-50 pointer-events-none;
+    content: attr(data-tooltip);
+  }
+
+  .steps-timeline-container {
+    @apply relative;
+  }
+
+  .steps-timeline-container::before {
+    @apply absolute left-[15px] top-2 bottom-2 w-[2px] opacity-20 transition-colors duration-300;
+    content: "";
+    background-color: var(--theme-primary);
+  }
+}
+
+@layer base {
+  :root {
+    --theme-primary: #6366f1;
+    --theme-background: #f8fafc;
+    --theme-surface: #ffffff;
+    --theme-border: #e2e8f0;
+    --theme-text: #0f172a;
+    --theme-text-muted: #64748b;
+    --theme-sidebar: #0f172a;
+    --theme-sidebar-text: #f1f5f9;
+    --theme-sidebar-text-muted: #94a3b8;
+    --theme-accent: #818cf8;
+  }
+
+  body {
+    @apply transition-colors duration-300 antialiased overflow-hidden;
+    background-color: var(--theme-background);
+    color: var(--theme-text);
+  }
+
+  * {
+    @apply transition-colors duration-300;
+    border-color: var(--theme-border);
+  }
+
+  /* Custom Scrollbar for a technical feel */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-700/50 rounded-full hover:bg-slate-600;
+  }
+}
+
+@media print {
+  /* Change the dashboard layout from Grid to Block so charts stack vertically on paper */
+  .chart-grid {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  /* Prevent charts from being cut in half across two pages */
+  .chart-card {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-bottom: 40px !important;
+    width: 100% !important;
+    display: block !important;
+  }
+
+  /* Hide the sidebar, top navigation, and export buttons during print */
+  .no-print, .sidebar, .export-buttons, select, button, form, header, aside {
+    display: none !important;
+  }
+
+  /* Reset background colors to white for better printer ink usage */
+  body, .dashboard-container, .chart-card, .chart-card > div, .bg-slate-900, .bg-[#020617], .bg-slate-950, .bg-slate-900\/40, .bg-slate-900\/80 {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    border-color: #ddd !important;
+  }
+
+  /* Text color resets for readability */
+  h1, h2, h3, h4, h5, h6, p, span, li, a {
+    color: black !important;
+  }
+
+  /* Allow the fixed layout panel and all parents to display naturally on print pages */
+  body, html, #root, #root > div, .fixed, .absolute, .overflow-y-auto, .flex-1, [ref] {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    position: relative !important;
+    display: block !important;
+    inset: auto !important;
+    width: 100% !important;
+  }
+}
+
+@media print {
+  .recharts-responsive-container, .echarts-for-react {
+    min-height: 350px !important;
+    height: 350px !important;
+  }
+}
