@@ -2,29 +2,58 @@
 
 **Clinical Analytical Workspace & Decentralized Multi-Source Data Node**
 
-AK Aletheo Pro is an advanced, enterprise-grade Electron desktop application designed for secure data ingestion, multi-dataset synthesis, and AI-driven reporting. Powered by Google's latest Gemini AI models, it allows users to extract "Data DNA" from CSV/Excel files and generate interactive, multilingual dashboards without compromising local data security.
+AK Aletheo Pro is an advanced Electron desktop application for secure data ingestion, multi-dataset synthesis, and AI-driven reporting. It supports CSV/Excel parsing, local storage, multilingual dashboards, and AI-assisted insights in a privacy-conscious workflow.
 
 ## ✨ Key Features
 
-* 🧠 **Dynamic AI Synthesis:** Powered by Google's Gemini AI with support for dynamic SDK model switching and custom API keys directly from the UI.
-* 🔒 **Zero-Trust Local Vault:** Data is parsed securely via Web Workers and stored locally using IndexedDB. No sensitive records traverse external relays.
-* 📊 **Automated Intelligence:** Instantly generates interactive charts, markdown tables, and deep textual insights.
-* 🌍 **Multilingual Node:** Seamlessly switch dashboard and reporting languages (English, Hindi, Hinglish, Marathi, Tamil, etc.) on the fly.
-* 🔄 **Seamless OTA Updates:** Built-in auto-updater to ensure you always have the latest features and AI SDK configurations.
+- 🧠 Dynamic AI synthesis with provider switching and custom API keys
+- 🔒 Local-first data vault using IndexedDB and browser-safe processing
+- 📊 Interactive charts, markdown summaries, and analytical reports
+- 🌍 Multilingual dashboard and reporting experience
+- 🔄 Desktop packaging and update-ready Electron workflow
 
 ## 🛠️ Tech Stack
 
-* **Framework:** Electron, Vite, React 19, TypeScript
-* **Styling:** Tailwind CSS, Lucide React
-* **AI Integration:** `@google/genai`
-* **Data Processing:** PapaParse (CSV), SheetJS (Excel)
-* **Storage:** IndexedDB (`idb`)
+- Electron, Vite, React 19, TypeScript
+- Tailwind CSS, Lucide React
+- AI integration via OpenAI-compatible providers and Gemini
+- Data processing with PapaParse and SheetJS
+- Storage with IndexedDB
 
-## 🚀 Getting Started (Development)
+## 🚀 Getting Started
 
-To run this project locally:
+### Install dependencies
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/Awinashk567/AK-ALETHEO-PRO-APP.git](https://github.com/Awinashk567/AK-ALETHEO-PRO-APP.git)
-   cd AK-ALETHEO-PRO-APP
+```bash
+npm install
+```
+
+### Run in development mode
+
+```bash
+npm run dev
+```
+
+### Build for production
+
+```bash
+npm run build
+```
+
+### Package desktop app
+
+```bash
+npm run pack:desktop
+```
+
+## 🔐 Environment
+
+Create a local environment file if needed:
+
+```bash
+cp .env.example .env
+```
+
+## 📦 Project Notes
+
+This repository is set up for GitHub-based hosting and Electron desktop packaging. The current build artifacts and local dependencies are intentionally ignored by Git.
