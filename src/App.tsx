@@ -5,7 +5,7 @@ import { Dashboard } from './components/Dashboard';
 import { ReportView } from './components/ReportView';
 import { ComparisonHub } from './components/ComparisonHub';
 import { OnboardingModal } from './components/OnboardingModal';
-import { generateInsight, summarizeData, performAutoAnalysis, generateFinalReport } from './services/geminiService';
+import { generateInsight, summarizeData, performAutoAnalysis, generateFinalReport } from './services/aiService';
 import { DataFile, ChatMessage, Step } from './types';
 import { workspaceStorage } from './services/storage';
 import Papa from 'papaparse';

@@ -10,7 +10,7 @@ import {
   Legend, Cell, CartesianGrid 
 } from 'recharts';
 import { DataFile } from '../types';
-import { generateInsight, summarizeData, generateMultiDatasetSynthesis, calculateSectionScore } from '../services/geminiService';
+import { generateInsight, summarizeData, generateMultiDatasetSynthesis, calculateSectionScore } from '../services/aiService';
 import { AKAletheoBranding } from './Branding';
 import { Dashboard } from './Dashboard';
 import Markdown from 'react-markdown';

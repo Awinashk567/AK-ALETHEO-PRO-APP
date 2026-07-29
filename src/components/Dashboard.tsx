@@ -247,7 +247,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ file, onClose, language = 
     if (!dnaToUse || isSynthesizing || aiMetadata) return;
 
     const synthesize = async () => {
-      const { generateVisualizationMetadata } = await import('../services/geminiService');
+      const { generateVisualizationMetadata } = await import('../services/aiService');
       setIsSynthesizing(true);
       try {
         const metadata = await generateVisualizationMetadata(dnaToUse, language);
@@ -316,7 +316,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ file, onClose, language = 
       setLoadingChartIds(prev => ({ ...prev, [chartId]: true }));
       
       try {
-        const { executeChartQuery } = await import('../services/geminiService');
+        const { executeChartQuery } = await import('../services/aiService');
         const dnaToUse = processedPayload?.dna?.summaryText || file.dnaSummary;
         if (!dnaToUse) return;
 

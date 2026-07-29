@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from 'motion/react';
 import { LANGUAGES } from '../constants';
 import { getVaultSnapshots, deleteFromVault, VaultSnapshot } from '../lib/vault';
 
-// UPDATED PROPS TO INCLUDE CHECKBOX LOGIC
 interface SidebarProps {
   workspaces?: {id: string, name: string, timestamp: string}[];
   files: DataFile[];
@@ -17,8 +16,8 @@ interface SidebarProps {
   selectedFileId?: string;
   language: string;
   onLanguageChange: (lang: string) => void;
-  checkedFileIds?: string[]; // NEW PROP
-  onToggleFileCheck?: (fileId: string) => void; // NEW PROP
+  checkedFileIds?: string[];
+  onToggleFileCheck?: (fileId: string) => void;
 }
 
 // --- Data Mesh Background Component (Unchanged) ---
@@ -116,7 +115,7 @@ export const Sidebar: React.FC<SidebarProps> = ( {
   selectedFileId,
   language,
   onLanguageChange,
-  checkedFileIds = [], // INITIALIZED
+  checkedFileIds = [],
   onToggleFileCheck
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -129,8 +128,8 @@ export const Sidebar: React.FC<SidebarProps> = ( {
   // DYNAMIC STATES FOR CONFIGURATION
   const [tempApiKey, setTempApiKey] = useState('');
   const [tempModel, setTempModel] = useState('');
+  const [tempProvider, setTempProvider] = useState('google'); // MULTI-LLM PROVIDER STATE
 
-  // Auto-open folder if a file inside it is selected
   useEffect(() => {
     if (selectedFileId) {
       const activeFile = files.find(f => f.id === selectedFileId);
@@ -150,8 +149,11 @@ export const Sidebar: React.FC<SidebarProps> = ( {
     if (isSettingsOpen) {
       const savedKey = localStorage.getItem('AK_CUSTOM_API_KEY') || '';
       const savedModel = localStorage.getItem('AK_CUSTOM_MODEL') || '';
+      const savedProvider = localStorage.getItem('AK_AI_PROVIDER') || 'google'; // FETCH SAVED PROVIDER
+      
       setTempApiKey(savedKey);
       setTempModel(savedModel);
+      setTempProvider(savedProvider);
     }
   }, [isSettingsOpen]);
 
@@ -180,6 +182,9 @@ export const Sidebar: React.FC<SidebarProps> = ( {
     } else {
       localStorage.setItem('AK_CUSTOM_MODEL', tempModel.trim());
     }
+    
+    // SAVE THE SELECTED AI PROVIDER
+    localStorage.setItem('AK_AI_PROVIDER', tempProvider);
     
     alert('System Configuration updated successfully! Please refresh the application for changes to take effect.');
     setIsSettingsOpen(false);
@@ -220,7 +225,6 @@ export const Sidebar: React.FC<SidebarProps> = ( {
     return groups;
   }, [filteredFiles, workspaces]);
 
-  // NEW: Updated FileItem with Checkbox
   const FileItem = ({ file, isNested = false }: { file: DataFile, isNested?: boolean }) => {
     const isChecked = checkedFileIds.includes(file.id);
 
@@ -245,7 +249,6 @@ export const Sidebar: React.FC<SidebarProps> = ( {
             />
           )}
 
-          {/* THE CUSTOM CHECKBOX */}
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -260,7 +263,6 @@ export const Sidebar: React.FC<SidebarProps> = ( {
             {isChecked && <Check size={10} className="text-black font-bold" />}
           </button>
           
-          {/* THE CLICKABLE FILE NAME AREA */}
           <button
             onClick={() => onSelectFile(file.id)}
             className="flex-1 flex items-center gap-2.5 overflow-hidden text-left py-1"
@@ -281,7 +283,6 @@ export const Sidebar: React.FC<SidebarProps> = ( {
           </button>
         </div>
         
-        {/* Action Buttons */}
         <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all z-10">
           <button 
             onClick={(e) => {
@@ -554,30 +555,55 @@ export const Sidebar: React.FC<SidebarProps> = ( {
               </div>
               
               <div className="p-5 space-y-4">
+                
+                {/* 🚀 NEW: MULTI-LLM PROVIDER SELECTION DROPDOWN */}
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                    Custom Gemini API Key
+                    Active AI Engine
+                  </label>
+                  <select 
+                    value={tempProvider}
+                    onChange={(e) => setTempProvider(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-indigo-500 transition-colors"
+                  >
+                    <option value="google">🟢 Google Gemini (Default)</option>
+                    <option value="openai">🔵 OpenAI (ChatGPT)</option>
+                    <option value="anthropic">🟣 Anthropic (Claude)</option>
+                    <option value="grok">🖤 xAI (Grok)</option>
+                    <option value="groq">⚡ Groq (Fastest)</option>
+                    <option value="deepseek">🐋 DeepSeek</option>
+                    <option value="perplexity">🔍 Perplexity</option>
+                    <option value="mistral">⛵ Mistral AI</option>
+                    <option value="together">🌐 Together AI</option>
+                  </select>
+                  <p className="text-[9px] text-slate-500 leading-relaxed pt-1">
+                    Select the AI provider you want to use for analysis.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    Provider API Key
                   </label>
                   <input 
                     type="password"
-                    placeholder="Enter new API Key (starts with AIza...)"
+                    placeholder="Enter API Key for selected provider..."
                     value={tempApiKey}
                     onChange={(e) => setTempApiKey(e.target.value)}
                     className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-700"
                   />
                   <p className="text-[9px] text-slate-500 leading-relaxed pt-1">
-                    Provide a custom API key to override the default environment key. Leave empty and save to revert to default.
+                    Provide the correct API key for your chosen AI Engine.
                   </p>
                 </div>
                 
-                {/* NEW FIELD FOR CUSTOM MODEL */}
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                     Custom Model Version
                   </label>
                   <input 
                     type="text"
-                    placeholder="e.g. gemini-2.5-flash or gemini-2.0-pro"
+                    placeholder="e.g. gpt-4o, claude-3-5-sonnet-latest"
                     value={tempModel}
                     onChange={(e) => setTempModel(e.target.value)}
                     className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-700"
